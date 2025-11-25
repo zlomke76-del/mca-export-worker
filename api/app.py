@@ -3,17 +3,15 @@ import io
 import csv
 
 from fastapi import FastAPI, HTTPException, Request, Response
-
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import letter
-
 from docx import Document
 
-# FastAPI app that Vercel will discover automatically
+# FastAPI app – Vercel will auto-detect this
 app = FastAPI()
 
-# Shared secret – must match PY_WORKER_KEY in the studio.moralclarity.ai project
+# Shared secret – must match PY_WORKER_KEY in studio.moralclarity.ai
 PY_WORKER_KEY = os.getenv("PY_WORKER_KEY", "")
 
 
@@ -91,7 +89,7 @@ async def generate(request: Request):
     if auth_header != expected:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
-    # ---- Parse body safely (no Pydantic to avoid 422 on minor shape changes) ----
+    # ---- Parse body safely ----
     try:
         body = await request.json()
     except Exception:
@@ -128,3 +126,4 @@ async def generate(request: Request):
     }
 
     return Response(content=data, media_type=media_type, headers=headers)
+
